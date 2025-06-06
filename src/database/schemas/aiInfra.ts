@@ -1,5 +1,14 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix  */
-import { boolean, integer, jsonb, pgTable, primaryKey, text, varchar } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  foreignKey,
+  integer,
+  jsonb,
+  pgTable,
+  primaryKey,
+  text,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 import { timestamps } from '@/database/schemas/_helpers';
 import { users } from '@/database/schemas/user';
@@ -62,7 +71,14 @@ export const aiModels = pgTable(
 
     ...timestamps,
   },
-  (table) => [primaryKey({ columns: [table.id, table.providerId, table.userId] })],
+  (table) => [
+    primaryKey({ columns: [table.id, table.providerId, table.userId] }),
+    foreignKey({
+      columns: [table.providerId, table.userId],
+      foreignColumns: [aiProviders.id, aiProviders.userId],
+      name: 'ai_models_provider_id_user_id_ai_providers_id_user_id_fk',
+    }).onDelete('cascade'),
+  ],
 );
 
 export type NewAiModelItem = Omit<typeof aiModels.$inferInsert, 'userId'>;
