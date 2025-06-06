@@ -1,0 +1,1 @@
+ALTER TABLE "ai_models" ADD CONSTRAINT "ai_models_provider_id_user_id_ai_providers_id_user_id_fk" FOREIGN KEY ("provider_id","user_id") REFERENCES "public"."ai_providers"("id","user_id") ON DELETE cascade ON UPDATE no action;
